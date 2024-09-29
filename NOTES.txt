@@ -1,0 +1,26 @@
+current:
+- bug: when resizing vertically, player could skip over enemies
+
+
+
+
+# ncurses reference
+- mvaddch DOES NOT wrap when outside of screen bounds
+- printw DOES wrap
+
+
+- waddchnstr:
+  https://github.com/mirror/ncurses/blob/87c2c84cbd2332d6d94b12a1dcaf12ad1a51a938/ncurses/base/lib_addstr.c#L83
+  - Use mvwaddchnstr
+
+
+
+
+# overkill implementation
+Final Workflow
+- Thread 1: Inputs
+  - Read input, and update inputs object
+- Thread 2: Game logic and printing
+  - Read inputs object
+  - Update
+  - Draw
