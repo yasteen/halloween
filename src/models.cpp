@@ -13,4 +13,10 @@ namespace halloween {
  _//_\n\
 /.  .\\\n\
 \\_WW_/";
+
+    const std::string MODEL_zombie = "\
+  /--\\\n\
+  \\--/\n\
+==(##|\n\
+   ||";
 }

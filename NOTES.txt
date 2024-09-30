@@ -1,7 +1,11 @@
 current:
-- bug: when resizing vertically, player could skip over enemies
-
-
+- when resizing vertically, player could skip over enemies
+- when resizing vertically, enemies stay at their respective y locations
+- reimplement drawing so that spaces don't overwrite existing characters
+- think of some other game mechanics with other mobs
+- after adding a few more mobs, maybe reorganize entities?
+- death screen
+- home screen
 
 
 # ncurses reference

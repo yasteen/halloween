@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 
-#define PLAYER_OFFSET_X 8
-#define PLAYER_SPEED 0.8f
-#define PLAYER_JUMP_STRENGTH 1.08f
+#define PLAYER_OFFSET_X 12
+#define PLAYER_SPEED 0.9f
+#define PLAYER_JUMP_STRENGTH 1.2
 #define GROUND_HEIGHT 4
 #define GRAVITY 0.1f
 #define SHOOT_COOLDOWN 300
@@ -17,14 +17,23 @@
 
 namespace halloween {
 
-    struct Sprite {
+    unsigned int rand_range(unsigned int min, unsigned int max, unsigned int div);
+
+    struct Entity {
         float x, y;
         int w, h;
+        int offset_x, offset_y;
         std::vector<std::vector<chtype>> p;
-        void print(float camera_x);
+        bool alive = true;
 
-        Sprite() : Sprite{0, 0, 0, 0, std::vector<std::string_view>()}{};
-        Sprite(float x, float y, int w, int h, std::vector<std::string_view> strs);
+        Entity() : Entity{0, 0, 0, 0, std::vector<std::string_view>()}{};
+        Entity(float x, float y, int w, int h, std::vector<std::string_view> strs) :
+        Entity{x, y, w, h, 0, 0, strs}{}
+        Entity(float x, float y, int w, int h, int offset_x, int offset_y,
+                std::vector<std::string_view> strs);
+
+        void print(float camera_x);
+        bool isCollidingWith(const Entity & other);
     };
 
     class Game {
@@ -33,16 +42,20 @@ namespace halloween {
             int game_height;
             float camera_x = 0; // sync to player.x
 
-            Sprite player;
+            Entity player;
             float player_dy = 0;
+            int lives = 3;
 
             Timer shoot_timer;
             Timer pumpkin_timer;
+            Timer zombie_timer;
 
-            std::vector<Sprite> bullets;
-            std::vector<Sprite> pumpkins;
+            std::vector<Entity> bullets;
+            std::vector<Entity> pumpkins;
+            std::vector<Entity> zombies;
 
             unsigned int pumpkin_cooldown;
+            unsigned int zombie_cooldown;
 
             void start();
             int tick();
