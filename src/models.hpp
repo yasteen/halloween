@@ -1,10 +1,16 @@
 #pragma once
 
+#include <ncurses.h>
 #include <string>
+#include <vector>
 
 namespace halloween {
-    extern const std::string MODEL_player;
-    extern const std::string MODEL_bullet;
-    extern const std::string MODEL_pumpkin;
-    extern const std::string MODEL_zombie;
+    typedef std::vector<std::vector<chtype>> Model;
+
+    extern Model MODEL_PLAYER;
+    extern Model MODEL_BULLET;
+    extern Model MODEL_PUMPKIN;
+    extern Model MODEL_ZOMBIE;
+
+    void initialize_textures();
 }

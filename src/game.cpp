@@ -1,7 +1,5 @@
 #include "game.hpp"
 
-#include "models.hpp"
-
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -17,31 +15,22 @@ namespace halloween {
         return min + ((rand() % (div + 1)) * (max - min)) / (div + 1);
     }
 
-    Entity::Entity(float x, float y, int w, int h, int offset_x, int offset_y,
-            std::vector<std::string_view> strs):
-        x{x}, y{y}, w{w}, h{h}, offset_x{offset_x}, offset_y{offset_y}, alive{true} {
-
-        for (const std::string_view& str : strs) {
-            int i = 0;
-            if (str.length() == 0) return;
-            p.emplace_back();
-            for (auto & c : str) {
-                if (c == '\n') {
-                    p.emplace_back();
-                    i++;
-                } else {
-                    p[i].emplace_back(c | A_NORMAL | COLOR_PAIR(0));
-                }
-            }
-        }
-    }
-
     void Entity::print(float camera_x) {
-        for (size_t i = 0; i < p.size(); i++) {
-            if (p[i].size() > 0) {
-                mvaddchnstr(y + i + offset_y, x - camera_x + offset_x, &p[i][0],
-                        p[i].size());
+        assert(p != NULL);
+        assert(p->size() > frame);
+        int x_cur = 0;
+        int y_cur = 0;
+        for (size_t i = 0; i < (*p)[frame].size(); i++) {
+            char c = (*p)[frame][i];
+            if (c == '\n') {
+                x_cur = 0;
+                y_cur++;
+                continue;
             }
+            if (c != ' ') {
+                mvaddch(y + y_cur + offset_y, x - camera_x + x_cur + offset_x, c);
+            }
+            x_cur++;
         }
     }
 
@@ -52,8 +41,9 @@ namespace halloween {
     }
 
     void Game::start() {
-        std::cout <<sizeof(std::vector<Entity>)<<std::endl;
         srand((unsigned)time(0));
+
+        initialize_textures();
 
         // ncurses init
         initscr();
@@ -64,7 +54,7 @@ namespace halloween {
         timeout(0);
         getmaxyx(stdscr, game_height, game_width);
         player = Entity(PLAYER_OFFSET_X, game_height - GROUND_HEIGHT - 4, 4, 4, -1, 0,
-                std::vector<std::string_view>{{MODEL_player}});
+                &MODEL_PLAYER);
 
         // Init spawn timers
         pumpkin_cooldown = rand_range(2, 6, 8) * 1000;
@@ -95,8 +85,7 @@ namespace halloween {
             exit(0);
         } else if (x == 'x') {
             if (shoot_timer.getTime() > SHOOT_COOLDOWN) {
-                bullets.emplace_back(player.x + 5, player.y + 2, 2, 1,
-                        std::vector<std::string_view>{{MODEL_bullet}});
+                bullets.emplace_back(player.x + 5, player.y + 2, 2, 1, &MODEL_BULLET);
                 shoot_timer.reset();
             }
         } else if (x == 'z') {
@@ -127,7 +116,7 @@ namespace halloween {
         // * Pumpkin
         if (pumpkin_timer.getTime() > pumpkin_cooldown) {
             pumpkins.emplace_back(player.x + game_width, game_height - GROUND_HEIGHT - 3,
-                    6, 3, std::vector<std::string_view>{{MODEL_pumpkin}});
+                    6, 3, &MODEL_PUMPKIN);
             pumpkin_timer.reset();
             pumpkin_cooldown = rand_range(2000, 5000, 4);
         }
@@ -135,7 +124,7 @@ namespace halloween {
         // * Zombie
         if (zombie_timer.getTime() > zombie_cooldown) {
             zombies.emplace_back(player.x + game_width, game_height - GROUND_HEIGHT - 4,
-                    4, 4, -2, 0, std::vector<std::string_view>{{MODEL_zombie}});
+                    4, 4, -2, 0, &MODEL_ZOMBIE);
             zombie_timer.reset();
             zombie_cooldown = rand_range(1000, 2000, 5);
         }

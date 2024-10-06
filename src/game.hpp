@@ -1,6 +1,7 @@
 #pragma once
 
 #include "timer.hpp"
+#include "models.hpp"
 
 #include <ncurses.h>
 #include <string>
@@ -23,14 +24,15 @@ namespace halloween {
         float x, y;
         int w, h;
         int offset_x, offset_y;
-        std::vector<std::vector<chtype>> p;
+        Model* p;
         bool alive = true;
+        unsigned int frame = 0;
 
-        Entity() : Entity{0, 0, 0, 0, std::vector<std::string_view>()}{};
-        Entity(float x, float y, int w, int h, std::vector<std::string_view> strs) :
-        Entity{x, y, w, h, 0, 0, strs}{}
-        Entity(float x, float y, int w, int h, int offset_x, int offset_y,
-                std::vector<std::string_view> strs);
+        Entity() : Entity{0, 0, 0, 0, NULL}{}
+        Entity(float x, float y, int w, int h, Model* p) :
+            Entity{x, y, w, h, 0, 0, p}{}
+        Entity(float x, float y, int w, int h, int offset_x, int offset_y, Model* p):
+            x{x}, y{y}, w{w}, h{h}, offset_x{offset_x}, offset_y{offset_y}, p{p}{};
 
         void print(float camera_x);
         bool isCollidingWith(const Entity & other);
