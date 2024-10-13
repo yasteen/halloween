@@ -1,5 +1,6 @@
 #pragma once
 
+#include "constants.hpp"
 #include "timer.hpp"
 #include "models.hpp"
 
@@ -7,22 +8,6 @@
 #include <string>
 #include <vector>
 
-#define GAME_WIDTH 80
-#define GAME_HEIGHT 40
-#define PLAYER_OFFSET_X 12
-#define BULLET_SPEED 1.5f
-#define BULLET_RANGE 80
-#define INIT_PLAYER_SPEED 1.5f
-#define DASH_SPEED INIT_PLAYER_SPEED * 3.0f
-#define DASH_DURATION 150
-#define DASH_COOLDOWN 450
-#define PLAYER_JUMP_STRENGTH 1.2
-#define GROUND_HEIGHT 4
-#define GRAVITY 0.1f
-#define SHOOT_COOLDOWN 300
-#define IMMUNE_TIME 1000
-
-#define TICK_DURATION 40
 
 namespace halloween {
 
@@ -45,24 +30,24 @@ namespace halloween {
             x{x}, y{y}, dx{dx}, w{w}, h{h}, offset_x{offset_x}, offset_y{offset_y},
             p{p}{};
 
-        void print(float camera_x, int game_width, int game_height);
+        void print(float camera_x, int screen_width, int screen_height);
         bool isCollidingWith(const Entity & other);
 
-        static inline void game_mvaddch(int y, int x, chtype ch, int game_width,
-                int game_height);
+        static inline void game_mvaddch(int y, int x, chtype ch, int screen_width,
+                int screen_height);
     };
 
     class Game {
         public:
-            int game_width;
-            int game_height;
+            int screen_width;
+            int screen_height;
             float camera_x = 0; // sync to player.x
 
             Entity player;
             float player_dy = 0;
             float player_speed = INIT_PLAYER_SPEED;
             int lives = 3;
-            bool can_dash = true;
+            float dash_start;
 
             // Timers
             Timer game_timer;
@@ -94,7 +79,6 @@ namespace halloween {
             void draw();
             void draw_background();
             void draw_border();
-            //inline void game_mvprintw();
 
             float cur_player_speed();
     };
