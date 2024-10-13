@@ -10,6 +10,7 @@ namespace halloween {
             Timer();
             void reset();
             unsigned long int getTime();
+            void setTimeRelativeToNow(unsigned long t);
     };
 
 }
