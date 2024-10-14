@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cmath>
 #include <cstring>
-#include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
 
@@ -68,8 +67,8 @@ namespace halloween {
         bat_cooldown = rand_range(3000, 6500, 9);
         pumpkin_cooldown = rand_range(1200, 3000, 4);
         zombie_cooldown = rand_range(1000, 3000, 5);
-        immune_timer.setTimeRelativeToNow(-IMMUNE_TIME * 2);
-        dash_timer.setTimeRelativeToNow(-DASH_COOLDOWN * 2);
+        immune_timer.setTime(IMMUNE_TIME * 2);
+        dash_timer.setTime(DASH_COOLDOWN * 2);
         while (tick());
         return (long int) std::round(camera_x);
     }
@@ -121,7 +120,7 @@ namespace halloween {
     void Game::update() {
         // Player movement
         if (player.x < dash_start + DASH_DISTANCE) {
-            player.dx = DASH_SPEED + game_timer.getTime() / 1000 * 0.1f;
+            player.dx = DASH_SPEED + game_timer.getTime() * 0.1f / 1000;
             player_dy = 0;
         } else {
             player.dx = cur_player_speed();
@@ -268,7 +267,7 @@ namespace halloween {
     }
 
     float Game::cur_player_speed() {
-        return INIT_PLAYER_SPEED + game_timer.getTime() / 1000 * .01f;
+        return INIT_PLAYER_SPEED + game_timer.getTime() * .01f / 1000;
     }
 }
 

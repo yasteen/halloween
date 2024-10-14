@@ -9,8 +9,13 @@ namespace halloween {
             std::chrono::milliseconds start;
             Timer();
             void reset();
+
+            // Get time difference between now and the start time in milliseconds
             unsigned long int getTime();
-            void setTimeRelativeToNow(unsigned long t);
+
+            // Set the start time such that the difference between now and the start time
+            // is `t` milliseconds.
+            void setTime(unsigned long t);
     };
 
 }

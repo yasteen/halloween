@@ -15,10 +15,10 @@ namespace halloween {
         return (current_time - start).count();
     }
 
-    void Timer::setTimeRelativeToNow(unsigned long t) {
-        auto now = duration_cast<std::chrono::milliseconds>(
+    void Timer::setTime(unsigned long t) {
+        auto current_time = duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch());
         auto tdiff = std::chrono::milliseconds(t);
-        start = now + tdiff;
+        start = current_time - tdiff;
     }
 }

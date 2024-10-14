@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ncurses.h>
-#include <string>
 #include <vector>
 
 #define COLOR_HURT 1

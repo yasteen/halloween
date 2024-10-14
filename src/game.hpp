@@ -5,7 +5,6 @@
 #include "models.hpp"
 
 #include <ncurses.h>
-#include <string>
 #include <vector>
 
 
@@ -47,7 +46,7 @@ namespace halloween {
             float player_dy = 0;
             float player_speed = INIT_PLAYER_SPEED;
             int lives = 3;
-            float dash_start;
+            float dash_start = 0;
 
             // Timers
             Timer game_timer;
